@@ -1,0 +1,53 @@
+server:
+  port: 8098
+    
+#management endpoints on a separate port
+management:
+  port: 8099
+  security:
+    enabled: false # management port is internal only. no need to secure it.
+    
+user.service:
+  name: 'default profile:'
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:bootexample;MODE=MySQL
+  h2:
+    console:
+      enabled: true
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: default
+    hibernate:
+      ddl-auto: create-drop
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+        
+user.service:
+  name: 'test profile:'
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.100.68/PrestamoPersonal?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Mexico_City
+    username: ppuser
+    password: ppuser@
+
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
+      #ddl-auto: update # todo: in non-dev environments, comment this out:
+      
+user.service:
+  name: 'test profile:'
