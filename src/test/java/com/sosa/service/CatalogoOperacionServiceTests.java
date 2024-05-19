@@ -273,6 +273,16 @@ class CatalogoOperacionServiceTests {
 	@DisplayName("Test para actualizar la operacion por id, intento de modificar datos de auditoría (fechaRegistro) - Escenario de error 6.")
 	void test_actualizar_operacion_error_6() {
 		//given
+		CatalogoDTO passed = CatalogoDTO.builder()
+				.idCatalogo(1)
+				.descripcion("Abono")
+				.fechaRegistro(fechaRegistro)
+				.fechaActualizacion(null)
+				.usuarioRegistra("admin")
+				.usuarioActualiza(null)
+				.activo(true)
+				.build();
+		
 		CatalogoOperacion saved = CatalogoOperacion.builder()
 				.idCatOperacion(1)
 				.descripcion("Comision")
@@ -287,7 +297,7 @@ class CatalogoOperacionServiceTests {
 		
 		//when
 		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.updateOperacion(dto);
+			catalogoOperacionService.updateOperacion(passed);
 		});
 		
 		//then

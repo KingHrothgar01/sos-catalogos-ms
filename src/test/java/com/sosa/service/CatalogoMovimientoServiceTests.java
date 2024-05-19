@@ -273,6 +273,17 @@ class CatalogoMovimientoServiceTests {
 	@DisplayName("Test para actualizar movimiento por id, intento de modificar datos de auditoría (fechaRegistro) - Escenario de error 6.")
 	void test_actualizar_movimiento_error_6() {
 		//given
+		CatalogoDTO passed = CatalogoDTO.builder()
+				.idCatalogo(1)
+				.descripcion("Abono")
+				.fechaRegistro(fechaRegistro)
+				.fechaActualizacion(null)
+				.usuarioRegistra("admin")
+				.usuarioActualiza(null)
+				.activo(true)
+				.build();
+		
+		
 		CatalogoMovimiento saved = CatalogoMovimiento.builder()
 				.idCatMovimiento(1)
 				.descripcion("Comision")
@@ -287,7 +298,7 @@ class CatalogoMovimientoServiceTests {
 		
 		//when
 		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoMovimientoService.updateMovimiento(dto);
+			catalogoMovimientoService.updateMovimiento(passed);
 		});
 		
 		//then

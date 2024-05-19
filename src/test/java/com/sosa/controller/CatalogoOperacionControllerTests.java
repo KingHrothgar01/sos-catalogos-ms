@@ -236,7 +236,7 @@ public class CatalogoOperacionControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_actualizar_operacion_error_4")
 	void test_actualizar_operacion_error_4() throws Exception{
 		// given
 		when(operacionService.updateOperacion(any(CatalogoDTO.class))).thenThrow(HTTP404Exception.class);
@@ -256,7 +256,7 @@ public class CatalogoOperacionControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_actualizar_operacion_error_5")
 	void test_actualizar_operacion_error_5() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -336,7 +336,7 @@ public class CatalogoOperacionControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_eliminar_operacion_error_3")
 	void test_eliminar_operacion_error_3() throws Exception{
 		// given
 		when(operacionService.deleteOperacion(anyLong())).thenThrow(HTTP404Exception.class);
@@ -353,7 +353,7 @@ public class CatalogoOperacionControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_eliminar_operacion_error_4")
 	void test_eliminar_operacion_error_4() throws Exception{
 		// given
 		when(operacionService.deleteOperacion(anyLong())).thenThrow(HTTP400Exception.class);
@@ -422,7 +422,7 @@ public class CatalogoOperacionControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_obtener_operacion_error_3")
 	void test_obtener_operacion_error_3() throws Exception{
 		// given
 		when(operacionService.findOperacion(anyLong())).thenThrow(HTTP404Exception.class);
@@ -439,7 +439,7 @@ public class CatalogoOperacionControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_obtener_operacion_error_4")
 	void test_obtener_operacion_error_4() throws Exception{
 		// given
 		when(operacionService.findOperacion(anyLong())).thenThrow(HTTP400Exception.class);

@@ -239,7 +239,7 @@ public class CatalogoMovimientoControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_actualizar_movimiento_error_4")
 	void test_actualizar_movimiento_error_4() throws Exception{
 
 		
@@ -258,7 +258,7 @@ public class CatalogoMovimientoControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_actualizar_movimiento_error_5")
 	void test_actualizar_movimiento_error_5() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -338,7 +338,7 @@ public class CatalogoMovimientoControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_eliminar_movimiento_error_3")
 	void test_eliminar_movimiento_error_3() throws Exception{
 		// given
 		when(movimientoService.deleteMovimiento(anyLong())).thenThrow(HTTP404Exception.class);
@@ -355,7 +355,7 @@ public class CatalogoMovimientoControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_eliminar_movimiento_error_4")
 	void test_eliminar_movimiento_error_4() throws Exception{
 		// given
 		when(movimientoService.deleteMovimiento(anyLong())).thenThrow(HTTP400Exception.class);
@@ -425,7 +425,7 @@ public class CatalogoMovimientoControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_obtener_movimiento_error_3")
 	void test_obtener_movimiento_error_3() throws Exception{
 		// given
 		when(movimientoService.findMovimiento(anyLong())).thenThrow(HTTP404Exception.class);
@@ -442,7 +442,7 @@ public class CatalogoMovimientoControllerTests {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("test_obtener_movimiento_error_4")
 	void test_obtener_movimiento_error_4() throws Exception{
 		// given
 		when(movimientoService.findMovimiento(anyLong())).thenThrow(HTTP400Exception.class);
