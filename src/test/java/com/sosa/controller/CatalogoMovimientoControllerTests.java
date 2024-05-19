@@ -116,7 +116,7 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().is5xxServerError())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is("Error en servidor.")));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)));
 	}
 	
 	@Test
@@ -157,7 +157,9 @@ public class CatalogoMovimientoControllerTests {
 		        .andExpect(status().is5xxServerError())
 			    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP500Exception))
 			    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_012, result.getResolvedException().getMessage()))
-			    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_500)));
+			    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_012)))
+			    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)));
+
 	}
 	
 	@Test
@@ -183,18 +185,19 @@ public class CatalogoMovimientoControllerTests {
 	
 	@Test
 	void test_actualizar_movimiento_error_1() throws Exception {
+                ObjectMapper mapper = new ObjectMapper();
 		// given
 		
 		// when
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/catalogos/movimientos/{id}", 2)
-				.contentType(MediaType.APPLICATION_JSON));
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(dto)));
 
 		// then
 		response.andDo(print())
 	        .andExpect(status().isBadRequest())
-		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
-		    .andExpect(result -> assertEquals("Required request body is missing: public com.sosa.model.dto.CatalogoDTO com.sosa.controller.CatalogoMovimientoController.updateMovimiento(java.lang.Long,com.sosa.model.dto.CatalogoDTO,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)", result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_005)))
+	        .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
+	        .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_005, result.getResolvedException().getMessage()))
 		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
@@ -211,7 +214,8 @@ public class CatalogoMovimientoControllerTests {
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
 		    .andExpect(result -> assertEquals("Required request body is missing: public com.sosa.model.dto.CatalogoDTO com.sosa.controller.CatalogoMovimientoController.updateMovimiento(java.lang.Long,com.sosa.model.dto.CatalogoDTO,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)", result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_005)))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -230,16 +234,18 @@ public class CatalogoMovimientoControllerTests {
 		        .andExpect(status().is5xxServerError())
 			    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP500Exception))
 			    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_013, result.getResolvedException().getMessage()))
-			    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_500)));
+			    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_005)))
+			    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)));
 	}
 	
 	@Test
 	@DisplayName("")
 	void test_actualizar_movimiento_error_4() throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
+
 		
 		when(movimientoService.updateMovimiento(any(CatalogoDTO.class))).thenThrow(HTTP404Exception.class);
-		
+
+		ObjectMapper mapper = new ObjectMapper();		
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/catalogos/movimientos/{id}", 1)
 			    .contentType(MediaType.APPLICATION_JSON)
 			    .content(mapper.writeValueAsString(dto)));
@@ -247,7 +253,8 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+			.andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP404Exception))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 	}
 	
 	@Test
@@ -264,7 +271,8 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+			.andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -307,7 +315,8 @@ public class CatalogoMovimientoControllerTests {
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
 		    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_008, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)))
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_008)));
 	}
 	
 	@Test
@@ -324,7 +333,8 @@ public class CatalogoMovimientoControllerTests {
 		        .andExpect(status().is5xxServerError())
 			    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP500Exception))
 			    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_014, result.getResolvedException().getMessage()))
-			    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_500)));
+			    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)))
+			    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_014)));
 	}
 	
 	@Test
@@ -341,7 +351,7 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 	}
 	
 	@Test
@@ -358,7 +368,7 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -387,17 +397,13 @@ public class CatalogoMovimientoControllerTests {
 		// when
 		ResultActions response = mockMvc.perform(get("/prestamos/v1/catalogos/movimientos/{id}", -1)
 				.contentType(MediaType.APPLICATION_JSON));
-		
-		// then
-		response.andDo(print())
-		        .andExpect(status().isBadRequest());
 
 		// then
 		response.andDo(print())
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
 		    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_010, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_010)));
 	}
 	
 	@Test
@@ -414,7 +420,7 @@ public class CatalogoMovimientoControllerTests {
 	        .andExpect(status().isNotFound())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP404Exception))
 		    .andExpect(result -> assertEquals(HTTP_MSG_404, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 				
 	}
 	
@@ -432,7 +438,7 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 	}
 	
 	@Test
@@ -449,7 +455,7 @@ public class CatalogoMovimientoControllerTests {
 		response.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -457,7 +463,7 @@ public class CatalogoMovimientoControllerTests {
 	void test_listar_movimientos() throws Exception{
 		PagingDTO dto = new PagingDTO();
 			dto.setPage(0);
-			dto.setSize(2);
+			dto.setSize(1);
 			dto.setOrder(Direction.ASC);
 			dto.setProperty("idMovimiento");
 		
@@ -465,11 +471,11 @@ public class CatalogoMovimientoControllerTests {
 		List<CatalogoDTO> listaMovimientos = new ArrayList<>();
 		listaMovimientos.add(CatalogoDTO.builder().idCatalogo(1).descripcion("Abono").fechaRegistro(new Date()).usuarioRegistra("admin").build());
 		listaMovimientos.add(CatalogoDTO.builder().idCatalogo(2).descripcion("Cargo").fechaRegistro(new Date()).usuarioRegistra("admin").build());
-		PageImpl<CatalogoDTO> page = new PageImpl<CatalogoDTO>(listaMovimientos, PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(dto.getProperty()).ascending()), 3);
+		PageImpl<CatalogoDTO> page = new PageImpl<CatalogoDTO>(listaMovimientos, PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(dto.getProperty()).ascending()), 2);
 		
 		Link l[] = new Link[] {
 				Link.of("http://localhost:8080/prestamos/v1/catalogos/movimientos?sortOrder=ASC&page=0&size=2&sort=idMovimiento")};
-		PagedModel<CatalogoDTO> model = PagedModel.of(listaMovimientos, new PageMetadata(2, 0, 2, 1), l);
+		PagedModel<CatalogoDTO> model = PagedModel.of(listaMovimientos, new PageMetadata(1, 0, 2, 2), l);
 		
 		given(movimientoService.findAllMovimientos(any(PagingDTO.class))).willReturn(page);
 		given(pagedResourcesAssembler.toModel(any(Page.class), any(CatalogTransactionModelAssembler.class))).willReturn(model);
@@ -491,17 +497,26 @@ public class CatalogoMovimientoControllerTests {
 	
 	@Test
 	void test_listar_movimientos_error_1() throws Exception{
+		PagingDTO dto = new PagingDTO();
+		dto.setPage(0);
+		dto.setSize(1);
+		dto.setOrder(Direction.ASC);
+		dto.setProperty("idCatOperacion");
 		// given
 		when(movimientoService.findAllMovimientos(any(PagingDTO.class))).thenThrow(HTTP400Exception.class);
 		
 		// when
-		ResultActions response = mockMvc.perform(get("/prestamos/v1/catalogos/movimientos"));
+		ResultActions response = mockMvc.perform(get("/prestamos/v1/catalogos/movimientos")
+				.param("page", dto.getPage().toString())
+				.param("size", dto.getSize().toString())
+				.param("property", dto.getProperty())
+				.param("sortOrder", dto.getOrder().toString()));
 		
 		// then
 		response.andDo(print())
 		        .andExpect(status().isBadRequest())
 		        .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
-			    .andExpect(jsonPath("$.errorDetail", is("Error en petición cliente.")));
+			.andExpect(jsonPath("$.error-message", is("Error en petición cliente.")));
 		
 	}
 }

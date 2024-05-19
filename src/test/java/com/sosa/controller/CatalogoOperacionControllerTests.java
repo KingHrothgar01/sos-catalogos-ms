@@ -190,10 +190,6 @@ public class CatalogoOperacionControllerTests {
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/catalogos/operaciones/{id}", 2)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(dto)));
-
-		// then
-		response.andDo(print())
-		        .andExpect(status().isBadRequest());
 		
 		response.andDo(print())
 	        .andExpect(status().isBadRequest())
