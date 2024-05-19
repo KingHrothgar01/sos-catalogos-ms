@@ -116,7 +116,7 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 			.andExpect(status().is5xxServerError())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is("Error en servidor.")));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)));
 	}
 	
 	@Test
@@ -156,7 +156,8 @@ public class CatalogoOperacionControllerTests {
 		        .andExpect(status().is5xxServerError())
 			    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP500Exception))
 			    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CO_012, result.getResolvedException().getMessage()))
-			    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_500)));
+			    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CO_012)))
+			    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)));
 	}
 	
 	@Test
@@ -198,7 +199,7 @@ public class CatalogoOperacionControllerTests {
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
 		    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CO_005, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -214,7 +215,8 @@ public class CatalogoOperacionControllerTests {
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
 		    .andExpect(result -> assertEquals("Required request body is missing: public com.sosa.model.dto.CatalogoDTO com.sosa.controller.CatalogoOperacionController.updateOperacion(java.lang.Long,com.sosa.model.dto.CatalogoDTO,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)", result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CO_005)))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -233,24 +235,28 @@ public class CatalogoOperacionControllerTests {
 		        .andExpect(status().is5xxServerError())
 			    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP500Exception))
 			    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CO_013, result.getResolvedException().getMessage()))
-			    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_500)));
+			    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CO_005)))
+			    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)));
 	}
 	
 	@Test
 	@DisplayName("")
 	void test_actualizar_operacion_error_4() throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
-		
+		// given
 		when(operacionService.updateOperacion(any(CatalogoDTO.class))).thenThrow(HTTP404Exception.class);
 		
+		// when
+		ObjectMapper mapper = new ObjectMapper();
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/catalogos/operaciones/{id}", 1)
 			    .contentType(MediaType.APPLICATION_JSON)
 			    .content(mapper.writeValueAsString(dto)));
 		
+		// then
 		response.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+			.andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP404Exception))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 	}
 	
 	@Test
@@ -267,7 +273,8 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+			.andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -310,7 +317,8 @@ public class CatalogoOperacionControllerTests {
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
 		    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CO_008, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)))
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CO_008)));
 	}
 	
 	@Test
@@ -327,7 +335,8 @@ public class CatalogoOperacionControllerTests {
 		        .andExpect(status().is5xxServerError())
 			    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP500Exception))
 			    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CO_014, result.getResolvedException().getMessage()))
-			    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_500)));
+			    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_500)))
+			    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CO_014)));
 	}
 	
 	@Test
@@ -344,7 +353,7 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 	}
 	
 	@Test
@@ -361,7 +370,7 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test
@@ -389,17 +398,13 @@ public class CatalogoOperacionControllerTests {
 		// when
 		ResultActions response = mockMvc.perform(get("/prestamos/v1/catalogos/operaciones/{id}", -1)
 				.contentType(MediaType.APPLICATION_JSON));
-		
-		// then
-		response.andDo(print())
-		        .andExpect(status().isBadRequest());
 
 		// then
 		response.andDo(print())
 	        .andExpect(status().isBadRequest())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
 		    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CO_010, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CO_010)));
 	}
 	
 	@Test
@@ -416,7 +421,7 @@ public class CatalogoOperacionControllerTests {
 	        .andExpect(status().isNotFound())
 		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP404Exception))
 		    .andExpect(result -> assertEquals(HTTP_MSG_404, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 				
 	}
 	
@@ -434,7 +439,7 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_404)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_404)));
 	}
 	
 	@Test
@@ -451,7 +456,7 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -513,8 +518,7 @@ public class CatalogoOperacionControllerTests {
 		response.andDo(print())
 		        .andExpect(status().isBadRequest())
 		        .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
-			    .andExpect(jsonPath("$.errorDetail", is("Error en petición cliente.")));
-		
+			    .andExpect(jsonPath("$.error-message", is("Error en petición cliente.")));
 	}
 
 }

@@ -61,7 +61,7 @@ public class CatalogoOperacionController extends AbstractRestHandler {
 		return dto;
 	}
 
-	@GetMapping(value = "prestamos/v1/catalogos/operaciones", consumes = { "application/json", "application/xml" }, produces = "application/hal+json")
+	@GetMapping(value = "prestamos/v1/catalogos/operaciones", produces = "application/hal+json")
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody PagedModel<CatalogoDTO> getAllItems(
 			@RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,

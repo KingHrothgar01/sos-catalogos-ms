@@ -183,23 +183,19 @@ public class CatalogoMovimientoControllerTests {
 	
 	@Test
 	void test_actualizar_movimiento_error_1() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
 		// given
 		
 		// when
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/catalogos/movimientos/{id}", 2)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(mapper.writeValueAsString(dto)));
+				.contentType(MediaType.APPLICATION_JSON));
 
 		// then
 		response.andDo(print())
-		        .andExpect(status().isBadRequest());
-		
-		response.andDo(print())
 	        .andExpect(status().isBadRequest())
-		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HTTP400Exception))
-		    .andExpect(result -> assertEquals(BUSINESS_MSG_ERR_CM_005, result.getResolvedException().getMessage()))
-		    .andExpect(jsonPath("$.errorDetail", is(HTTP_MSG_400)));
+		    .andExpect(result -> assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
+		    .andExpect(result -> assertEquals("Required request body is missing: public com.sosa.model.dto.CatalogoDTO com.sosa.controller.CatalogoMovimientoController.updateMovimiento(java.lang.Long,com.sosa.model.dto.CatalogoDTO,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)", result.getResolvedException().getMessage()))
+		    .andExpect(jsonPath("$.error-detail", is(BUSINESS_MSG_ERR_CM_005)))
+		    .andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
 	}
 	
 	@Test

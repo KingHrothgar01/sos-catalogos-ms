@@ -32,27 +32,27 @@ public class CatalogoDTO extends RepresentationModel<CatalogoDTO> {
 	@JsonSetter("descripcion")
 	private String descripcion;
 
-	@JsonProperty(value = "fecha-registro", access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(value = "fecha-registro")
 	@JsonSetter("fecha-registro")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date fechaRegistro;
 	
 	//@JsonIgnore
 	//@FutureOrPresent(message = "La fecha de actualización tiene que ser mayor o igual a hoy.")
-	@JsonProperty(value = "fecha-actualizacion", access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(value = "fecha-actualizacion")
 	@JsonSetter("fecha-actualizacion")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date fechaActualizacion;
 
-	@JsonProperty(value = "usuario-registra", access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(value = "usuario-registra")
 	@JsonSetter("usuario-registra")
 	private String usuarioRegistra;
 	
-	@JsonProperty(value = "usuario-actualiza", access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(value = "usuario-actualiza")
 	@JsonSetter("usuario-actualiza")
 	private String usuarioActualiza;
 
-	@JsonProperty(value = "activo", access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(value = "activo")
 	@JsonSetter("activo")
 	private Boolean activo;
 }
