@@ -62,6 +62,7 @@ class CatalogoMovimientoServiceTests {
 	private CatalogoMovimiento model;
 	
 	private PagingDTO paging;
+	
 	@BeforeEach
 	private void setup() {
 		fechaRegistro = new Date();
