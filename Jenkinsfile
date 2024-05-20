@@ -3,6 +3,7 @@ pipeline {
 	
 	environment {
 	    SONAR_CREDENTIALS = credentials('092a3604-21d9-4423-a638-7ea0cf2e1d2d')
+	    DOCKERHUB_CREDENTIALS = credentials('sos-loans-dockerhub')
 	}
   
   	options {
