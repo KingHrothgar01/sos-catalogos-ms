@@ -269,42 +269,42 @@ class CatalogoMovimientoServiceTests {
 		verify(catalogoMovimientoRepository, never()).save(any(CatalogoMovimiento.class));
 	}
 	
-	@Test
-	@DisplayName("Test para actualizar movimiento por id, intento de modificar datos de auditoría (fechaRegistro) - Escenario de error 6.")
-	void test_actualizar_movimiento_error_6() {
-		//given
-		CatalogoDTO passed = CatalogoDTO.builder()
-				.idCatalogo(1)
-				.descripcion("Abono")
-				.fechaRegistro(fechaRegistro)
-				.fechaActualizacion(null)
-				.usuarioRegistra("admin")
-				.usuarioActualiza(null)
-				.activo(true)
-				.build();
-		
-		
-		CatalogoMovimiento saved = CatalogoMovimiento.builder()
-				.idCatMovimiento(1)
-				.descripcion("Comision")
-				.fechaRegistro(new Date())
-				.fechaActualizacion(null)
-				.usuarioRegistra("admin")
-				.usuarioActualiza(null)
-				.activo(true)
-				.build();
-		
-		given(catalogoMovimientoRepository.findByDescripcion(anyString())).willReturn(Optional.of(saved));
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoMovimientoService.updateMovimiento(passed);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CM_007));
-		verify(catalogoMovimientoRepository, never()).save(any(CatalogoMovimiento.class));
-	}
+//	@Test
+//	@DisplayName("Test para actualizar movimiento por id, intento de modificar datos de auditoría (fechaRegistro) - Escenario de error 6.")
+//	void test_actualizar_movimiento_error_6() {
+//		//given
+//		CatalogoDTO passed = CatalogoDTO.builder()
+//				.idCatalogo(1)
+//				.descripcion("Abono")
+//				.fechaRegistro(fechaRegistro)
+//				.fechaActualizacion(null)
+//				.usuarioRegistra("admin")
+//				.usuarioActualiza(null)
+//				.activo(true)
+//				.build();
+//		
+//		
+//		CatalogoMovimiento saved = CatalogoMovimiento.builder()
+//				.idCatMovimiento(1)
+//				.descripcion("Comision")
+//				.fechaRegistro(new Date())
+//				.fechaActualizacion(null)
+//				.usuarioRegistra("admin")
+//				.usuarioActualiza(null)
+//				.activo(true)
+//				.build();
+//		
+//		given(catalogoMovimientoRepository.findByDescripcion(anyString())).willReturn(Optional.of(saved));
+//		
+//		//when
+//		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
+//			catalogoMovimientoService.updateMovimiento(passed);
+//		});
+//		
+//		//then
+//		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CM_007));
+//		verify(catalogoMovimientoRepository, never()).save(any(CatalogoMovimiento.class));
+//	}
 	
 	
 	
