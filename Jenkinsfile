@@ -59,7 +59,7 @@ pipeline {
       		    // Build the Java Maven Project
       		    echo "Dockerizing Application"
       		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn -s $MAVEN_SETTINGS_XML clean package -DskipTests dockerfile:push'
+      		    	sh 'mvn -gs $MAVEN_SETTINGS_XML clean package -DskipTests dockerfile:push'
       		    }
       		}
     	}
