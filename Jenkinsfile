@@ -15,6 +15,7 @@ pipeline {
       		steps {
       		    // Checkout the code from the repository
       		    echo "Cleanup Workspace"
+      		    sh 'mvn --batch-mode -Dspring.profiles.active=test clean'
       		}
     	}
     	stage('Code Checkout') {
@@ -27,14 +28,14 @@ pipeline {
       		steps {
       		    // Build the Java Maven Project
       		    echo "Unit Tests"
-        		sh 'mvn test'
+        		sh 'mvn --batch-mode -Dspring.profiles.active=test test'
       		}
     	}
     	stage('Coverage') {
       		steps {
       		    // JaCoCo
       		    echo "Jacoco"
-  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
+  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test clean org.jacoco:jacoco-maven-plugin:prepare-agent test package'
   		    	step([$class: 'JacocoPublisher', 
   					execPattern: 'target/*.exec',
   					classPattern: 'target/classes',
