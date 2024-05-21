@@ -3,7 +3,6 @@ pipeline {
 	
 	environment {
 	    SONAR_CREDENTIALS = credentials('092a3604-21d9-4423-a638-7ea0cf2e1d2d')
-	    DOCKERHUB_CREDENTIALS = credentials('sos-loans-dockerhub')
 	}
   
   	options {
@@ -58,8 +57,8 @@ pipeline {
       		steps {
       		    // Build the Java Maven Project
       		    echo "Dockerizing Application"
-      		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn -gs $MAVEN_SETTINGS_XML clean package -DskipTests dockerfile:push'
+      		    configFileProvider([configFile(fileId: '53844f09-dfd0-49ad-b86c-8573c2882609', variable: 'USER_MAVEN_SETTINGS_XML')]){
+      		    	sh 'mvn -s $USER_MAVEN_SETTINGS_XML clean package -DskipTests dockerfile:push'
       		    }
       		}
     	}
