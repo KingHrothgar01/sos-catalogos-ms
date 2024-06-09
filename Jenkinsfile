@@ -63,5 +63,20 @@ pipeline {
       		    }
       		}
     	}
+    	stage('Trigger Config Change Pipeline') {
+    		steps {
+    		    script {
+		       		echo "triggering updatemanifestjob"
+		       		
+		       		pom = readMavenPom file: 'pom.xml'
+					IMAGE = pom.artifactId
+					VERSION = pom.version
+					
+		    		echo "IMAGE: ${IMAGE}"
+		   			echo "VERSION: ${VERSION}"
+		   			build job: 'sos-catalogos-ms-deploy', parameters: [string(name: 'VERSION', value: "${VERSION}")]
+		   		}
+	        }
+    	}
   	}
 }
