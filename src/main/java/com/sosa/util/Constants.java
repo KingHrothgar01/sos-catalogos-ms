@@ -18,7 +18,7 @@ public final class Constants {
 	
 	public static final String APPLICATION_MESSAGE_000 = "";
 	public static final String APPLICATION_MESSAGE_001 = "Application can not save Tasa.";
-	public static final String APPLICATION_MESSAGE_002 = "Large page size for transactions.";
+	public static final String APPLICATION_MESSAGE_002 = "Tama\u00F1o de p\u00E1gina muy grande.";
 	public static final String APPLICATION_MESSAGE_003 = "Utility Class.";
 	public static final String APPLICATION_MESSAGE_004 = "Ocurrio un error en el envio del correo electronico {0}";
 	
@@ -51,6 +51,8 @@ public final class Constants {
 	public static final String BUSINESS_MSG_ERR_CO_012 = "No fue posible dar de alta el catalogo.";
 	public static final String BUSINESS_MSG_ERR_CO_013 = "No fue posible actualizar el catalogo.";
 	public static final String BUSINESS_MSG_ERR_CO_014 = "No fue posible dar de baja el catalogo.";
+	
+	public static final String CUSTOM_METRICS_LARGE_PAYLOAD = "large_payload";
 	
 	public static final String SPECIFICATION_FIELD_ID = "id";
 	public static final String SPECIFICATION_FIELD_NUMANIO = "anio";

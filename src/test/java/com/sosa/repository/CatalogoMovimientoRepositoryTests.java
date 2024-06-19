@@ -57,7 +57,48 @@ class CatalogoMovimientoRepositoryTests {
 		//then
 		assertThat(movimientoGuardado).isNotNull();
 		assertThat(movimientoGuardado.getIdCatMovimiento()).isPositive();
+	}
+	
+	@Test
+	@DisplayName("Test para actualizar un movimiento.")
+	void test_actualizar_movimiento() {
+		Date fechaActualizacion = new Date();
+		//given
+		catalogoMovimientoRepository.save(abono);
 		
+		//when
+		CatalogoMovimiento movimientoGuardado = catalogoMovimientoRepository.findById(abono.getIdCatMovimiento()).orElse(null);
+		movimientoGuardado.setFechaActualizacion(fechaActualizacion);
+		movimientoGuardado.setDescripcion("Credit");
+		movimientoGuardado.setUsuarioActualiza("admin");
+		CatalogoMovimiento movimientoActualizado = catalogoMovimientoRepository.save(movimientoGuardado);
+		
+		//then
+		assertThat(movimientoActualizado).isNotNull();
+		assertThat(movimientoActualizado.getDescripcion()).isEqualTo("Credit");
+		assertThat(movimientoActualizado.getFechaActualizacion()).isEqualTo(fechaActualizacion);
+		assertThat(movimientoActualizado.getUsuarioActualiza()).isEqualTo("admin");
+	}
+	
+	@Test
+	@DisplayName("Test para eliminar un movimiento.")
+	void test_eliminar_movimiento() {
+		Date fechaActualizacion = new Date();
+		//given
+		catalogoMovimientoRepository.save(abono);
+		
+		//when
+		CatalogoMovimiento movimientoGuardado = catalogoMovimientoRepository.findById(abono.getIdCatMovimiento()).orElse(null);
+		movimientoGuardado.setActivo(false);
+		movimientoGuardado.setFechaActualizacion(fechaActualizacion);
+		movimientoGuardado.setUsuarioActualiza("admin");
+		CatalogoMovimiento movimientoActualizado = catalogoMovimientoRepository.save(movimientoGuardado);
+		
+		//then
+		assertThat(movimientoActualizado).isNotNull();
+		assertThat(movimientoActualizado.getActivo()).isFalse();
+		assertThat(movimientoActualizado.getFechaActualizacion()).isEqualTo(fechaActualizacion);
+		assertThat(movimientoActualizado.getUsuarioActualiza()).isEqualTo("admin");
 	}
 	
 	@Test
@@ -97,50 +138,11 @@ class CatalogoMovimientoRepositoryTests {
 		catalogoMovimientoRepository.save(abono);
 		
 		//when
-		CatalogoMovimiento movimientoGuardado = catalogoMovimientoRepository.findById(abono.getIdCatMovimiento()).get();
+		CatalogoMovimiento movimientoGuardado = catalogoMovimientoRepository.findById(abono.getIdCatMovimiento()).orElse(null);
 		
 		//then
 		assertThat(movimientoGuardado).isNotNull();
 		assertThat(movimientoGuardado.getIdCatMovimiento()).isNotNegative();
 		assertThat(movimientoGuardado.getActivo()).isTrue();
-	}
-	
-	@Test
-	@DisplayName("Test para actualizar un movimiento.")
-	void test_actualizar_movimiento() {
-		//given
-		Date fechaActualizacion = new Date();
-		catalogoMovimientoRepository.save(abono);
-		
-		//when
-		CatalogoMovimiento movimientoGuardado = catalogoMovimientoRepository.findById(abono.getIdCatMovimiento()).get();
-		movimientoGuardado.setFechaActualizacion(fechaActualizacion);
-		movimientoGuardado.setDescripcion("Credit");
-		movimientoGuardado.setUsuarioActualiza("admin");
-		CatalogoMovimiento movimientoActualizado = catalogoMovimientoRepository.save(movimientoGuardado);
-		
-		//then
-		assertThat(movimientoActualizado).isNotNull();
-		assertThat(movimientoActualizado.getDescripcion()).isEqualTo("Credit");
-		assertThat(movimientoActualizado.getFechaActualizacion()).isEqualTo(fechaActualizacion);
-	}
-	
-	@Test
-	@DisplayName("Test para eliminar un movimiento.")
-	void test_eliminar_movimiento() {
-		//given
-		Date fechaActualizacion = new Date();
-		catalogoMovimientoRepository.save(abono);
-		
-		//when
-		CatalogoMovimiento movimientoGuardado = catalogoMovimientoRepository.findById(abono.getIdCatMovimiento()).get();
-		movimientoGuardado.setActivo(false);
-		movimientoGuardado.setFechaActualizacion(fechaActualizacion);
-		movimientoGuardado.setUsuarioActualiza("admin");
-		CatalogoMovimiento movimientoActualizado = catalogoMovimientoRepository.save(movimientoGuardado);
-		
-		//then
-		assertThat(movimientoActualizado).isNotNull();
-		assertThat(movimientoActualizado.getActivo()).isFalse();
 	}
 }

@@ -2,7 +2,7 @@ package com.sosa.model.dto;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.hateoas.RepresentationModel;
 
@@ -27,7 +27,7 @@ public class CatalogoDTO extends RepresentationModel<CatalogoDTO> {
 	@JsonSetter("id-catalogo")
 	private long idCatalogo;
 	
-	@NotNull(message = "El tipo de movimiento es requerido.")
+	@NotBlank(message = "La descripci\u00F3n es requerida.")
 	@JsonProperty("descripcion")
 	@JsonSetter("descripcion")
 	private String descripcion;
@@ -36,9 +36,7 @@ public class CatalogoDTO extends RepresentationModel<CatalogoDTO> {
 	@JsonSetter("fecha-registro")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date fechaRegistro;
-	
-	//@JsonIgnore
-	//@FutureOrPresent(message = "La fecha de actualización tiene que ser mayor o igual a hoy.")
+
 	@JsonProperty(value = "fecha-actualizacion")
 	@JsonSetter("fecha-actualizacion")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

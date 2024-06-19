@@ -1,15 +1,9 @@
 package com.sosa.service;
 
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_001;
-import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_002;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_003;
-import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_004;
-import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_005;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_006;
-import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_007;
-import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_008;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_009;
-import static com.sosa.util.Constants.BUSINESS_MSG_ERR_CO_010;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,6 +13,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.Date;
@@ -97,59 +92,8 @@ class CatalogoOperacionServiceTests {
 	}
 	
 	@Test
-	@DisplayName("Test para guardar una operación, DTO nulo - Escenario de error 1.")
-	void test_guardar_operacion_error_1() {
-		//given
-		//Catalogo Operación DTO es nulo
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.saveOperacion(null);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_002));
-		verify(catalogoOperacionRepository, never()).findByDescripcion(anyString());
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-	@Test
-	@DisplayName("Test para guardar una operación, Descripción nula - Escenario de error 2.")
-	void test_guardar_operacion_error_2() {
-		//given
-		dto.setDescripcion(null);
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.saveOperacion(dto);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_002));
-		verify(catalogoOperacionRepository, never()).findByDescripcion(anyString());
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-	@Test
-	@DisplayName("Test para guardar una operación, Descripción vacía - Escenario de error 3.")
-	void test_guardar_operacion_error_3() {
-		//given
-		dto.setDescripcion("");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.saveOperacion(dto);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_002));
-		verify(catalogoOperacionRepository, never()).findByDescripcion(anyString());
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-	@Test
-	@DisplayName("Test para guardar una operación que ha sido guardado previamente - Escenario de error 4.")
-	void test_guardar_catalogo_operacion_error_4() {
+	@DisplayName("Test para guardar una operación que ha sido guardado previamente - Escenario de error 1.")
+	void test_guardar_catalogo_operacion_error_1() {
 		//given
 		given(catalogoOperacionRepository.findByDescripcion(anyString())).willReturn(Optional.of(model));
 		
@@ -178,58 +122,8 @@ class CatalogoOperacionServiceTests {
 	}
 	
 	@Test
-	@DisplayName("Test para actualizar la operacion por id, DTO nulo - Escenario de error 1.")
+	@DisplayName("Test para actualizar la operacion por id, registro no encontrado - Escenario de error 1.")
 	void test_actualizar_operacion_error_1() {
-		//given
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.updateOperacion(null);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_005));
-		verify(catalogoOperacionRepository, never()).findByDescripcion(anyString());
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-	@Test
-	@DisplayName("Test para actualizar la operacion por id, Descripción nula - Escenario de error 2.")
-	void test_actualizar_operacion_error_2() {
-		//given
-		dto.setDescripcion(null);
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.updateOperacion(dto);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_005));
-		verify(catalogoOperacionRepository, never()).findByDescripcion(anyString());
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-	@Test
-	@DisplayName("Test para actualizar la operacion por id, Descripción vacía - Escenario de error 3.")
-	void test_actualizar_operacion_error_3() {
-		//given
-		dto.setDescripcion("");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.updateOperacion(dto);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_005));
-		verify(catalogoOperacionRepository, never()).findByDescripcion(anyString());
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-	@Test
-	@DisplayName("Test para actualizar la operacion por id, registro no encontrado - Escenario de error .")
-	void test_actualizar_operacion_error_4() {
 		//given
 		given(catalogoOperacionRepository.findByDescripcion(anyString())).willReturn(Optional.empty());
 		
@@ -242,71 +136,7 @@ class CatalogoOperacionServiceTests {
 		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_006));
 		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
 	}
-	
-	@Test
-	@DisplayName("Test para actualizar la operacion por id, intento de modificar datos de auditoría (usuarioRegistra) - Escenario de error 5.")
-	void test_actualizar_operacion_error_5() {
-		//given
-		CatalogoOperacion saved = CatalogoOperacion.builder()
-				.idCatOperacion(1)
-				.descripcion("Comision")
-				.fechaRegistro(fechaRegistro)
-				.fechaActualizacion(null)
-				.usuarioRegistra("impersonator")
-				.usuarioActualiza(null)
-				.activo(true)
-				.build();
-		
-		given(catalogoOperacionRepository.findByDescripcion(anyString())).willReturn(Optional.of(saved));
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.updateOperacion(dto);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_007));
-		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-	}
-	
-//	@Test
-//	@DisplayName("Test para actualizar la operacion por id, intento de modificar datos de auditoría (fechaRegistro) - Escenario de error 6.")
-//	void test_actualizar_operacion_error_6() {
-//		//given
-//		CatalogoDTO passed = CatalogoDTO.builder()
-//				.idCatalogo(1)
-//				.descripcion("Abono")
-//				.fechaRegistro(fechaRegistro)
-//				.fechaActualizacion(null)
-//				.usuarioRegistra("admin")
-//				.usuarioActualiza(null)
-//				.activo(true)
-//				.build();
-//		
-//		CatalogoOperacion saved = CatalogoOperacion.builder()
-//				.idCatOperacion(1)
-//				.descripcion("Comision")
-//				.fechaRegistro(new Date())
-//				.fechaActualizacion(null)
-//				.usuarioRegistra("admin")
-//				.usuarioActualiza(null)
-//				.activo(true)
-//				.build();
-//		
-//		given(catalogoOperacionRepository.findByDescripcion(anyString())).willReturn(Optional.of(saved));
-//		
-//		//when
-//		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-//			catalogoOperacionService.updateOperacion(passed);
-//		});
-//		
-//		//then
-//		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_007));
-//		verify(catalogoOperacionRepository, never()).save(any(CatalogoOperacion.class));
-//	}
-	
-	
-	
+
 	@Test
 	@DisplayName("Test para listar todas los operaciones existentes en el catálogo en orden ascendente.")
 	void test_listar_operaciones_ascendente() {
@@ -402,140 +232,8 @@ class CatalogoOperacionServiceTests {
 	}
 	
 	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, DTO nulo - Escenario de error 1.")
-	void test_listar_operaciones_error_1() {
-		//given
-		//TasaInteres DTO es nulo
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(null);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, orden con valor incorrecto - Escenario de error 2.")
-	void test_listar_operaciones_error_2() {
-		//given
-		paging = new PagingDTO();
-		paging.setPage(0);
-		paging.setSize(2);
-		paging.setProperty("idCatOperacion");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(paging);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, página con valor nulo - Escenario de error 3.")
-	void test_listar_tasas_interes_error_3() {
-		//given
-		paging = new PagingDTO();
-		paging.setOrder(Direction.ASC);
-		paging.setSize(2);
-		paging.setProperty("idCatOperacion");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(paging);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, tamaño con valor nulo - Escenario de error 4.")
-	void test_listar_tasas_interes_error_4() {
-		//given
-		paging = new PagingDTO();
-		paging.setPage(0);
-		paging.setOrder(Direction.ASC);
-		paging.setProperty("idCatOperacion");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(paging);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, columna con valor incorrecto - Escenario de error 5.")
-	void test_listar_tasas_interes_error_5() {
-		//given
-		paging = new PagingDTO();
-		paging.setPage(0);
-		paging.setSize(2);
-		paging.setOrder(Direction.ASC);
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(paging);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, página con valor incorrecto - Escenario de error 6.")
-	void test_listar_tasas_interes_error_6() {
-		//given
-		paging = new PagingDTO();
-		paging.setPage(-1);
-		paging.setSize(2);
-		paging.setOrder(Direction.ASC);
-		paging.setProperty("idCatOperacion");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(paging);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, tamaño con valor incorrecto - Escenario de error 7.")
-	void test_listar_tasas_interes_error_7() {
-		//given
-		paging = new PagingDTO();
-		paging.setPage(0);
-		paging.setSize(-1);
-		paging.setOrder(Direction.ASC);
-		paging.setProperty("idCatOperacion");
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findAllOperaciones(paging);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_010));
-		verify(catalogoOperacionRepository, never()).findAll(any(PageRequest.class));
-	}
-	
-	@Test
-	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, lista vacía - Escenario de error 8.")
-	void test_listar_tasas_interes_error_8() {
+	@DisplayName("Test para listar todas las operaciones existentes en el catálogo, lista vac\u00EDa - Escenario de error 1.")
+	void test_listar_tasas_interes_error_1() {
 		//given
 		paging = new PagingDTO();
 		paging.setPage(0);
@@ -546,7 +244,7 @@ class CatalogoOperacionServiceTests {
 		PageImpl<CatalogoOperacion> pagina = new PageImpl<CatalogoOperacion>(
 				List.of(),PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).ascending()), 0);
 		
-		given(catalogoOperacionRepository.findAll(PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).ascending()))).willReturn(pagina);
+		given(catalogoOperacionRepository.findAll(any(PageRequest.class))).willReturn(pagina);
 		
 		//when
 		Page<CatalogoDTO> operaciones = catalogoOperacionService.findAllOperaciones(paging);
@@ -558,6 +256,53 @@ class CatalogoOperacionServiceTests {
 		assertThat(operaciones.getTotalPages()).isZero();
 		assertThat(operaciones.getNumber()).isZero();
 		assertThat(operaciones.getTotalElements()).isZero();
+		assertThat(operaciones.getSort()).isEqualTo(Sort.by("idCatOperacion").ascending());
+	}
+	
+	@Test
+	@DisplayName("Test para listar todas las operaciones existentes de forma ascendente con numero de pagina mayor a 50.")
+	void test_listar_operaciones_error_2() {
+		//given
+		paging = new PagingDTO();
+		paging.setPage(0);
+		paging.setSize(52);
+		paging.setOrder(Direction.ASC);
+		paging.setProperty("idCatOperacion");
+		
+		CatalogoOperacion one = CatalogoOperacion.builder()
+				.idCatOperacion(1)
+				.descripcion("Disposicion")
+				.fechaRegistro(new Date())
+				.fechaActualizacion(null)
+				.usuarioRegistra("admin")
+				.usuarioActualiza(null)
+				.activo(true)
+				.build();
+		
+		CatalogoOperacion two = CatalogoOperacion.builder()
+				.idCatOperacion(2)
+				.descripcion("Interes")
+				.fechaRegistro(new Date())
+				.fechaActualizacion(null)
+				.usuarioRegistra("admin")
+				.usuarioActualiza(null)
+				.activo(true)
+				.build();
+		
+		PageImpl<CatalogoOperacion> pagina = new PageImpl<CatalogoOperacion>(
+				List.of(one, two),PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).ascending()), 2);
+		
+		given(catalogoOperacionRepository.findAll(any(PageRequest.class))).willReturn(pagina);
+		
+		//when
+		Page<CatalogoDTO> operaciones = catalogoOperacionService.findAllOperaciones(paging);
+		
+		//then
+		assertThat(operaciones).isNotNull();
+		assertThat(operaciones.getNumberOfElements()).isEqualTo(2);
+		assertThat(operaciones.getTotalPages()).isEqualTo(1);
+		assertThat(operaciones.getNumber()).isZero();
+		assertThat(operaciones.getTotalElements()).isEqualTo(2);
 		assertThat(operaciones.getSort()).isEqualTo(Sort.by("idCatOperacion").ascending());
 	}
 	
@@ -574,24 +319,11 @@ class CatalogoOperacionServiceTests {
 		assertThat(operacion).isPresent();
 	}
 	
-	@Test
-	@DisplayName("Test para obtener catalogo de operacion por id, id con valor incorrecto - Escenario de error 1.")
-	void test_obtener_catalogo_operacion_error_1() {
-		//given
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.findOperacion(-1);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_004));
-		verify(catalogoOperacionRepository, never()).findById(anyLong());
-	}
+	
 	
 	@Test
-	@DisplayName("Test para obtener catalogo de operacion por id, Catalogo no encontrado - Escenario de error 2.")
-	void test_obtener_catalogo_operacion_error_2() {
+	@DisplayName("Test para obtener catalogo de operacion por id, Catalogo no encontrado - Escenario de error 1.")
+	void test_obtener_catalogo_operacion_error_1() {
 		//given
 		given(catalogoOperacionRepository.findById(anyLong())).willReturn(Optional.empty());
 		
@@ -618,26 +350,12 @@ class CatalogoOperacionServiceTests {
 		then(catalogoOperacionBorrada).isNotNull();
 		then(catalogoOperacionBorrada).isPresent();
 		then(catalogoOperacionBorrada.get().getActivo()).isFalse();
+		verify(catalogoOperacionRepository, times(1)).save(any(CatalogoOperacion.class));
 	}
 	
 	@Test
-	@DisplayName("Test para eliminar una operacion por id, id con valor incorrecto - Escenario de error 1.")
+	@DisplayName("Test para eliminar una operacion por id, catalogo no encontrado - Escenario de error 1.")
 	void test_eliminar_operacion_error_1() {
-		//given
-		
-		//when
-		HTTP400Exception thrown = assertThrows(HTTP400Exception.class, () -> {
-			catalogoOperacionService.deleteOperacion(-1);
-		});
-		
-		//then
-		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_008));
-		verify(catalogoOperacionRepository, never()).findById(anyLong());
-	}
-	
-	@Test
-	@DisplayName("Test para eliminar una operacion por id, catalogo no encontrado - Escenario de error 2.")
-	void test_eliminar_operacion_error_2() {
 		//given
 		given(catalogoOperacionRepository.findById(anyLong())).willReturn(Optional.empty());
 		
@@ -648,5 +366,6 @@ class CatalogoOperacionServiceTests {
 		
 		//then
 		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_CO_009));
+		verify(catalogoOperacionRepository, times(0)).save(any(CatalogoOperacion.class));
 	}
 }

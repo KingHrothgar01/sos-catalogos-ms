@@ -36,14 +36,13 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
 	protected ApplicationEventPublisher eventPublisher;
 	protected static final String DEFAULT_PAGE_SIZE = "10";
 	protected static final String DEFAULT_PAGE_NUM = "0";
-	protected static final String DEFAULT_PAGE_PROPERTY = "idCatalogo";
 	protected static final String DEFAULT_PAGE_ORDER = "ASC";
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HTTP400Exception.class)
 	public @ResponseBody ErrorResponse handleDataStoreException(HTTP400Exception ex, WebRequest request,
 			HttpServletResponse response) {
-		LOGGER.info("Mensaje de Entrada con Errores: {}.", ex.getMessage());
+		LOGGER.error("Mensaje de Entrada con Errores: {}.", ex.getMessage());
 		Metrics.counter("Error-en-la-Peticion").increment();
 		return new ErrorResponse(ex, HTTP_MSG_400);
 	}
@@ -52,7 +51,7 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
 	@ExceptionHandler(HTTP401Exception.class)
 	public @ResponseBody ErrorResponse handleUnauthorizedException(HTTP401Exception ex, WebRequest request,
 			HttpServletResponse response) {
-		LOGGER.info("Error en la Autenticacion: {}.", ex.getMessage());
+		LOGGER.error("Error en la Autenticacion: {}.", ex.getMessage());
 		Metrics.counter("Credenciales-Incorrectas").increment();
 		return new ErrorResponse(ex, HTTP_MSG_401);
 	}
@@ -61,7 +60,7 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
 	@ExceptionHandler(HTTP403Exception.class)
 	public @ResponseBody ErrorResponse handleForbiddenException(HTTP403Exception ex, WebRequest request,
 			HttpServletResponse response) {
-		LOGGER.info("Permisos Insuficientes: {}.", ex.getMessage());
+		LOGGER.error("Permisos Insuficientes: {}.", ex.getMessage());
 		Metrics.counter("Permisos-Insuficietes").increment();
 		return new ErrorResponse(ex, HTTP_MSG_403);
 	}
@@ -70,7 +69,7 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
 	@ExceptionHandler(HTTP404Exception.class)
 	public @ResponseBody ErrorResponse handleResourceNotFoundException(HTTP404Exception ex, WebRequest request,
 			HttpServletResponse response) {
-		LOGGER.info("Recurso no Encontrado: {}.", ex.getMessage());
+		LOGGER.error("Recurso no Encontrado: {}.", ex.getMessage());
 		Metrics.counter("Recurso-no-Encontrado").increment();
 		return new ErrorResponse(ex, HTTP_MSG_404);
 	}
@@ -79,12 +78,12 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
 	@ExceptionHandler(HTTP500Exception.class)
 	public @ResponseBody ErrorResponse handleResourceNotFoundException(HTTP500Exception ex, WebRequest request,
 			HttpServletResponse response) {
-		LOGGER.info("Error en Servidor: {}.", ex.getMessage());
+		LOGGER.error("Error en Servidor: {}.", ex.getMessage());
 		Metrics.counter("Error-Servidor").increment();
 		return new ErrorResponse(ex, HTTP_MSG_500);
 	}
 
-	//@Override
+	@Override
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.eventPublisher = applicationEventPublisher;
 	}

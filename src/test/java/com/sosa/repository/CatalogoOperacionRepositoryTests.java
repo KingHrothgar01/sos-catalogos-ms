@@ -3,7 +3,6 @@ package com.sosa.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,45 +29,82 @@ import com.sosa.model.CatalogoOperacion;
 class CatalogoOperacionRepositoryTests {
 	
 	@Autowired
-	CatalogoOperacionRepository catalogo;
+	CatalogoOperacionRepository catalogoOperacionRepository;
 	
-	private CatalogoOperacion catOperacion;
+	private CatalogoOperacion comision;
 	
 	@BeforeEach
 	private void setup() {
-		catOperacion = CatalogoOperacion.builder()
+		comision = CatalogoOperacion.builder()
 				.descripcion("Comision")
 				.fechaRegistro(new Date())
 				.fechaActualizacion(null)
 				.usuarioRegistra("admin")
 				.usuarioActualiza(null)
+				.activo(true)
 				.build();
 	}
 
 	@Test
 	@DisplayName("Test para guardar una operacion.")
-	void testGuardarOperacion() {
+	void test_guardar_operacion() {
 		//given
-		CatalogoOperacion operacion = CatalogoOperacion.builder()
-				.descripcion("Disposicion")
-				.fechaRegistro(new Date())
-				.fechaActualizacion(null)
-				.usuarioRegistra("admin")
-				.usuarioActualiza(null)
-				.build();
+		//comision
 		
 		//when
-		CatalogoOperacion operacionGuardada = catalogo.save(operacion);
+		CatalogoOperacion operacionGuardada = catalogoOperacionRepository.save(comision);
 		
 		//then
 		assertThat(operacionGuardada).isNotNull();
-		assertThat(operacionGuardada.getIdCatOperacion()).isGreaterThan(0);
+		assertThat(operacionGuardada.getIdCatOperacion()).isPositive();
 		
 	}
 	
 	@Test
+	@DisplayName("Test para actualizar una operacion.")
+	void test_actualizar_operacion() {
+		Date fechaActualizacion = new Date();
+		//given
+		catalogoOperacionRepository.save(comision);
+		
+		//when
+		CatalogoOperacion operacionGuardado = catalogoOperacionRepository.findById(comision.getIdCatOperacion()).orElse(null);
+		operacionGuardado.setFechaActualizacion(fechaActualizacion);
+		operacionGuardado.setDescripcion("Impuesto");
+		operacionGuardado.setUsuarioActualiza("admin");
+		CatalogoOperacion operacionActualizado = catalogoOperacionRepository.save(operacionGuardado);
+		
+		//then
+		assertThat(operacionActualizado).isNotNull();
+		assertThat(operacionActualizado.getDescripcion()).isEqualTo("Impuesto");
+		assertThat(operacionActualizado.getFechaActualizacion()).isEqualTo(fechaActualizacion);
+		assertThat(operacionActualizado.getUsuarioActualiza()).isEqualTo("admin");
+	}
+	
+	@Test
+	@DisplayName("Test para eliminar una operacion.")
+	void test_eliminar_operacion() {
+		Date fechaActualizacion = new Date();
+		//given
+		catalogoOperacionRepository.save(comision);
+		
+		//when
+		CatalogoOperacion operacionGuardada = catalogoOperacionRepository.findById(comision.getIdCatOperacion()).orElse(null);
+		operacionGuardada.setActivo(false);
+		operacionGuardada.setFechaActualizacion(fechaActualizacion);
+		operacionGuardada.setUsuarioActualiza("admin");
+		CatalogoOperacion operacionActualizada = catalogoOperacionRepository.save(operacionGuardada);
+		
+		//then
+		assertThat(operacionActualizada).isNotNull();
+		assertThat(operacionActualizada.getActivo()).isFalse();
+		assertThat(operacionActualizada.getFechaActualizacion()).isEqualTo(fechaActualizacion);
+		assertThat(operacionActualizada.getUsuarioActualiza()).isEqualTo("admin");
+	}
+	
+	@Test
 	@DisplayName("Test para listar las operaciones.")
-	void testListarOperacions() {
+	void test_listar_operaciones() {
 		//given
 		CatalogoOperacion operacion = CatalogoOperacion.builder()
 				.descripcion("Interes")
@@ -77,48 +113,36 @@ class CatalogoOperacionRepositoryTests {
 				.usuarioRegistra("admin")
 				.usuarioActualiza(null)
 				.build();
-		catalogo.save(operacion);
-		catalogo.save(catOperacion);
+		
+		catalogoOperacionRepository.save(operacion);
+		catalogoOperacionRepository.save(comision);
+		
 		//when
-		Page<CatalogoOperacion> listaOperacions = catalogo.findAll(PageRequest.of(1, 2, Sort.by("descripcion").ascending()));
+		Page<CatalogoOperacion> listaOperaciones = catalogoOperacionRepository.findAll(PageRequest.of(0, 2, Sort.by("descripcion").ascending()));
+		
 		//then
-		assertThat(listaOperacions).isNotNull();
-		assertThat(listaOperacions.getSize()).isEqualTo(2);
+		assertThat(listaOperaciones).isNotNull();
+		assertThat(listaOperaciones.getSize()).isEqualTo(2);
+		assertThat(listaOperaciones.getNumber()).isZero();
+		assertThat(listaOperaciones.getNumberOfElements()).isEqualTo(2);
+		assertThat(listaOperaciones.getSort().toString()).hasToString("descripcion: ASC");
+		assertThat(listaOperaciones.getTotalElements()).isEqualTo(2);
+		assertThat(listaOperaciones.getTotalPages()).isEqualTo(1);
+		assertThat(listaOperaciones.getContent().get(0).getDescripcion()).isEqualTo("Comision");
 	}
 
 	@Test
 	@DisplayName("Test para obtener una operacion.")
-	void testObtenerOperacionPorId() {
+	void test_obtener_operacion_por_id() {
 		//given
-		catalogo.save(catOperacion);
+		catalogoOperacionRepository.save(comision);
+		
 		//when
-		CatalogoOperacion operacion = catalogo.findById(catOperacion.getIdCatOperacion()).get();
+		CatalogoOperacion operacionGuardada = catalogoOperacionRepository.findById(comision.getIdCatOperacion()).orElse(null);
+		
 		//then
-		assertThat(operacion).isNotNull();
-	}
-	
-	@Test
-	@DisplayName("Test para actualizar una operacion.")
-	void testActualizarOperacion() {
-		//given
-		catalogo.save(catOperacion);
-		//when
-		CatalogoOperacion operacion = catalogo.findById(catOperacion.getIdCatOperacion()).get();
-		operacion.setDescripcion("Impuesto");
-		CatalogoOperacion operacionActualizado = catalogo.save(operacion);
-		//then
-		assertThat(operacionActualizado.getDescripcion()).isEqualTo("Impuesto");
-	}
-	
-	@Test
-	@DisplayName("Test para eliminar una operacion.")
-	void testEliminarOperacion() {
-		//given
-		catalogo.save(catOperacion);
-		//when
-		catalogo.deleteById(catOperacion.getIdCatOperacion());
-		Optional<CatalogoOperacion> operacion = catalogo.findById(catOperacion.getIdCatOperacion());
-		//then
-		assertThat(operacion).isEmpty();
+		assertThat(operacionGuardada).isNotNull();
+		assertThat(operacionGuardada.getIdCatOperacion()).isNotNegative();
+		assertThat(operacionGuardada.getActivo()).isTrue();
 	}
 }
