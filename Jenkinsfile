@@ -22,7 +22,7 @@ pipeline {
       		steps {
       		    // JaCoCo
       		    echo "Jacoco"
-  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test -Drevision=${BUILD_NUMBER} org.jacoco:jacoco-maven-plugin:prepare-agent clean install'
+  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test -Drevision=${BUILD_NUMBER} org.jacoco:jacoco-maven-plugin:prepare-agent clean test package'
   		    	step([$class: 'JacocoPublisher', 
   					execPattern: 'target/*.exec',
   					classPattern: 'target/classes',
@@ -46,7 +46,7 @@ pipeline {
       		    // Build the Java Maven Project
       		    echo "Dockerizing Application"
       		    configFileProvider([configFile(fileId: '53844f09-dfd0-49ad-b86c-8573c2882609', variable: 'USER_MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn -s $USER_MAVEN_SETTINGS_XML -Drevision=${BUILD_NUMBER} clean package -DskipTests dockerfile:push'
+      		    	sh 'mvn -s $USER_MAVEN_SETTINGS_XML -Drevision=${BUILD_NUMBER} -DskipTests clean install'
       		    }
       		}
     	}
