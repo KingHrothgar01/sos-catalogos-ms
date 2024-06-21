@@ -5,7 +5,7 @@
 	
 	<groupId>com.sosa</groupId>
 	<artifactId>sos-catalogos-ms</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0${revision}</version>
 	<packaging>jar</packaging>
 	<name>sos-catalogos-ms</name>
 	<description>Demo project for Spring Boot</description>
@@ -26,6 +26,7 @@
 			**/sosa/SosCatalogosApplication.java,**/model/*,**/model/dto/*,**/aspect/*,**/util/*</sonar.coverage.exclusions>
 		<sonar.host.url>http://192.168.100.68/</sonar.host.url>
 		<spring-cloud.version>2021.0.8</spring-cloud.version>
+		<revision>-SNAPSHOT</revision>
 	</properties>
 	
 	<dependencies>

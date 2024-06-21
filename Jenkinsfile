@@ -35,7 +35,7 @@ pipeline {
       		steps {
       		    // JaCoCo
       		    echo "Jacoco"
-  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test clean org.jacoco:jacoco-maven-plugin:prepare-agent test package'
+  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test -Drevision=${BUILD_NUMBER} clean org.jacoco:jacoco-maven-plugin:prepare-agent test package'
   		    	step([$class: 'JacocoPublisher', 
   					execPattern: 'target/*.exec',
   					classPattern: 'target/classes',
