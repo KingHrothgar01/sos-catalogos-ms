@@ -5,7 +5,7 @@
 	
 	<groupId>com.sosa</groupId>
 	<artifactId>sos-catalogos-ms</artifactId>
-	<version>1.0${revision}</version>
+	<version>1.${revision}</version>
 	<packaging>jar</packaging>
 	<name>sos-catalogos-ms</name>
 	<description>Demo project for Spring Boot</description>
