@@ -56,7 +56,7 @@ pipeline {
 		       		echo "triggering updatemanifestjob"
 		       		
 		       		VERSION = sh (
-		       			script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout',
+		       			script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Drevision=${BUILD_NUMBER} -Dexpression=project.version -q -DforceStdout',
 		       			returnStdout: true
 		       		).trim()
 
