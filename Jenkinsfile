@@ -55,13 +55,11 @@ pipeline {
     		    script {
 		       		echo "triggering updatemanifestjob"
 		       		
-		       		echo 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout'
-		       		
-		       		pom = readMavenPom file: 'pom.xml'
-					IMAGE = pom.artifactId
-					VERSION = pom.version
-					
-		    		echo "IMAGE: ${IMAGE}"
+		       		VERSION = sh (
+		       			script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout',
+		       			returnStdout: true
+		       		).trim()
+
 		   			echo "VERSION: ${VERSION}"
 		   			build job: 'sos-catalogos-ms-deploy', parameters: [string(name: 'VERSION', value: "${VERSION}")]
 		   		}
