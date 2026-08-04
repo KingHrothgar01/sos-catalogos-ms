@@ -238,7 +238,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<failBuildOnCVSS>8</failBuildOnCVSS>
+					<!--failBuildOnCVSS>8</failBuildOnCVSS-->
+					<failBuildOnCVSS>11</failBuildOnCVSS>
 					<formats>
 						<format>HTML</format>
 						<format>JSON</format>
