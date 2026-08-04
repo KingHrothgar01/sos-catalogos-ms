@@ -8,21 +8,19 @@ pipeline {
   	options {
     	buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
     	disableConcurrentBuilds()
+    	timestamps()
   	}
   
 	stages {
-	    stage('Cleanup Workspace') {
+	    stage('Build & Unit Tests') {
+            steps {
+                echo 'Building application'
+                sh 'mvn --batch-mode -Dspring.profiles.active=test -Drevision=${BUILD_NUMBER} org.jacoco:jacoco-maven-plugin:prepare-agent clean verify'
+            }
+        }
+    	stage('Publish Coverage') {
       		steps {
-      		    // Checkout the code from the repository
-      		    echo "Cleanup Workspace"
-      		    sh 'mvn --batch-mode -Dspring.profiles.active=test clean'
-      		}
-    	}
-    	stage('Coverage') {
-      		steps {
-      		    // JaCoCo
-      		    echo "Jacoco"
-  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test -Drevision=${BUILD_NUMBER} org.jacoco:jacoco-maven-plugin:prepare-agent clean test package'
+      		    echo "Publishing JaCoCo Report"
   		    	step([$class: 'JacocoPublisher', 
   					execPattern: 'target/*.exec',
   					classPattern: 'target/classes',
@@ -31,22 +29,34 @@ pipeline {
 				])
       		}
     	}
-    	stage('Code Analysis') {
+    	stage('Dependency Check (SCA)') {
+            steps {
+                echo "OWASP Dependency-Check"
+                sh 'mvn --batch-mode org.owasp:dependency-check-maven:check || true'
+            }
+        }
+        stage('SAST - Semgrep') {
+            steps {
+                echo "Semgrep Security Scan"
+                sh '''
+                    pip3 install semgrep --quiet || true
+                    semgrep --config=auto --config=p/java --config=p/spring --error --quiet || true
+                '''
+            }
+        }
+    	stage('SonarQube Analysis') {
       		steps {
-      		    // SonarQube
-      		    echo "SonarQube"
+      		    echo "Running SonarQube Analysis"
       		    withSonarQubeEnv(installationName: 'localSonar') {
-      		        sh 'mvn sonar:sonar -Dsonar.login=$SONAR_CREDENTIALS'
+      		        sh 'mvn --batch-mode -Drevision=${BUILD_NUMBER} -Dsonar.login=$SONAR_CREDENTIALS sonar:sonar'
       		    }
-
       		}
     	}
-    	stage('Build Deploy Code') {
+    	stage('Docker Build & Push') {
       		steps {
-      		    // Build the Java Maven Project
-      		    echo "Dockerizing Application"
+      		    echo "Building and Publishing Docker Image"
       		    configFileProvider([configFile(fileId: '53844f09-dfd0-49ad-b86c-8573c2882609', variable: 'USER_MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn -s $USER_MAVEN_SETTINGS_XML -Drevision=${BUILD_NUMBER} -DskipTests clean install'
+      		    	sh 'mvn -s $USER_MAVEN_SETTINGS_XML --batch-mode -Drevision=${BUILD_NUMBER} dockerfile:build dockerfile:push'
       		    }
       		}
     	}

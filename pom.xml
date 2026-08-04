@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>com.sosa</groupId>
 	<artifactId>sos-catalogos-ms</artifactId>
 	<version>1.${revision}</version>
 	<packaging>jar</packaging>
 	<name>sos-catalogos-ms</name>
 	<description>Demo project for Spring Boot</description>
-	
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
-	
+
 	<properties>
-	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
+
+		<!-- Sonar -->
 		<sonar.cpd.exclusions>**/model/*.java</sonar.cpd.exclusions>
 		<sonar.coverage.exclusions>
 			**/sosa/SosCatalogosApplication.java,**/model/*,**/model/dto/*,**/aspect/*,**/util/*</sonar.coverage.exclusions>
@@ -28,13 +30,13 @@
 		<spring-cloud.version>2021.0.8</spring-cloud.version>
 		<revision>-SNAPSHOT</revision>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -45,33 +47,33 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-configuration-processor</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
@@ -82,29 +84,29 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path-assert</artifactId>
@@ -115,22 +117,22 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
-		
+
 		<dependency>
-    		<groupId>org.modelmapper</groupId>
-    		<artifactId>modelmapper</artifactId>
-    		<version>2.3.6</version>
-    	</dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-	    	<artifactId>spring-boot-starter-hateoas</artifactId>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.6</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.springdoc</groupId>
-		    <artifactId>springdoc-openapi-ui</artifactId>
-		    <version>1.6.4</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.4</version>
 		</dependency>
 	</dependencies>
 
@@ -158,21 +160,17 @@
 
 	<build>
 		<plugins>
+			<!-- Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.10.0.2594</version>
-			</plugin>
-
+			<!-- ==================== JaCoCo 0.8.15 - Cobertura de Código ==================== -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.10</version>
+				<version>0.8.15</version>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -186,6 +184,26 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>jacoco-check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>PACKAGE</element>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.70</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
 				</executions>
 				<configuration>
 					<excludes>
@@ -198,11 +216,43 @@
 				</configuration>
 			</plugin>
 
+			<!-- ==================== Sonar Scanner 5.7 - Calidad + Bugs ==================== -->
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>5.7.0.6970</version>
+			</plugin>
+
+			<!-- ==================== OWASP Dependency-Check - SCA ==================== -->
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>12.2.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<failBuildOnCVSS>8</failBuildOnCVSS>
+					<formats>
+						<format>HTML</format>
+						<format>JSON</format>
+					</formats>
+					<suppressionFiles>
+						<!-- Puedes agregar un archivo de supresiones si es necesario -->
+					</suppressionFiles>
+				</configuration>
+			</plugin>
+
+			<!-- ==================== Spotify Dockerfile ==================== -->
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
 				<version>1.4.10</version>
-				<executions>
+				<!--executions>
 					<execution>
 						<id>default</id>
 						<phase>install</phase>
@@ -211,10 +261,10 @@
 							<goal>push</goal>
 						</goals>
 					</execution>
-				</executions>
+				</executions-->
 				<configuration>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-					<repository>kinghrothgar01/${project.name}</repository>
+					<repository>kinghrothgar01/${project.artifactId}</repository>
 					<tag>${project.version}</tag>
 				</configuration>
 			</plugin>
